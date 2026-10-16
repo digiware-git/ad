@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad ke liye ♥</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg1:#12071f; --bg2:#3b0f4f; --pink:#ff6b9d; --rose:#ff3d7f; --gold:#ffd6a5; --soft:#ffe3ee; }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Poppins',sans-serif;color:var(--soft);overflow:hidden;
+    background:radial-gradient(circle at 20% 20%,var(--bg2),var(--bg1) 70%);}
+  #bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .wrap{position:relative;z-index:1;height:100%}
+  .page{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    padding:70px 20px 95px;text-align:center;overflow-y:auto}
+  .page.active{display:flex;animation:fade .8s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1}}
+  h1.script,h2.script{font-family:'Great Vibes',cursive;font-weight:400;color:var(--pink);text-shadow:0 0 25px rgba(255,107,157,.6)}
+  h1.script{font-size:clamp(3.5rem,14vw,7rem);line-height:1.1}
+  h2.script{font-size:clamp(2.3rem,9vw,3.8rem);margin-bottom:10px}
+  .sub{font-weight:300;opacity:.9;margin:10px 0 22px;max-width:520px;line-height:1.7}
+  .typed{min-height:5.5em;font-size:1.1rem;max-width:560px;line-height:1.8;white-space:pre-line}
+  .typed::after{content:'|';animation:blink 1s infinite;color:var(--pink)}
+  @keyframes blink{50%{opacity:0}}
+  .btn{border:none;cursor:pointer;font-family:inherit;font-size:1rem;font-weight:600;color:#fff;
+    padding:13px 30px;border-radius:50px;background:linear-gradient(135deg,var(--rose),#ff9a8b);
+    box-shadow:0 8px 25px rgba(255,61,127,.45);transition:transform .2s, box-shadow .2s}
+  .btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 12px 30px rgba(255,61,127,.6)}
+  .btn.ghost{background:rgba(255,255,255,.1);box-shadow:none;border:1px solid rgba(255,255,255,.25)}
+  .glass{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(12px);
+    border-radius:24px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .bigheart{font-size:4rem;animation:beat 1.2s infinite;display:inline-block;filter:drop-shadow(0 0 20px var(--rose))}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.2)}}
+
+  /* nav */
+  .nav{position:fixed;bottom:18px;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:14px}
+  .navbtn{padding:10px 22px;border-radius:30px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);
+    color:#fff;font-family:inherit;font-weight:600;font-size:.95rem;cursor:pointer;transition:.2s}
+  .navbtn:hover{background:var(--rose);transform:scale(1.05)}
+  .navbtn:disabled{opacity:.3;pointer-events:none}
+  .dots{display:flex;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:.3s}
+  .dot.on{background:var(--pink);transform:scale(1.5);box-shadow:0 0 12px var(--pink)}
+  .title-bar{position:fixed;top:12px;left:0;right:0;text-align:center;z-index:5;font-family:'Great Vibes',cursive;font-size:1.7rem;color:var(--gold)}
+
+  /* shayari */
+  .shayari-card{max-width:580px;width:100%;min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .tag{font-size:.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.85}
+  .shayari-text{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.1rem,4.4vw,1.5rem);line-height:1.9;white-space:pre-line;transition:opacity .4s}
+  .counter{font-size:.85rem;opacity:.6}
+  .row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+
+  /* games */
+  .hud{display:flex;gap:14px;justify-content:center;margin-bottom:12px;font-weight:600;flex-wrap:wrap}
+  .hud span{background:rgba(255,255,255,.1);padding:6px 16px;border-radius:30px}
+  #arena{position:relative;width:min(92vw,520px);height:min(52vh,380px);border-radius:24px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);touch-action:manipulation}
+  .fall{position:absolute;top:-50px;font-size:2rem;cursor:pointer;user-select:none;animation:drop linear forwards}
+  @keyframes drop{to{transform:translateY(480px)}}
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(18,7,31,.85);padding:20px;z-index:3}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(90vw,380px)}
+  .card{aspect-ratio:1;perspective:600px;cursor:pointer}
+  .card .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .card.flip .in{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;border-radius:14px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;font-size:2rem}
+  .front{background:linear-gradient(135deg,var(--rose),#9b4dff);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+  .back{background:var(--soft);transform:rotateY(180deg)}
+  .card.done .back{background:#ffd1e3;box-shadow:0 0 18px var(--pink)}
+
+  /* quiz */
+  .quiz{max-width:520px;width:100%}
+  .q{font-size:1.15rem;margin-bottom:18px;line-height:1.6}
+  .opt{display:block;width:100%;margin:9px 0;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer;transition:.2s}
+  .opt:hover{background:rgba(255,107,157,.35);transform:translateX(4px)}
+  .meter{height:16px;border-radius:20px;background:rgba(255,255,255,.15);overflow:hidden;margin:16px 0}
+  .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9a8b,var(--rose));transition:width 2s ease}
+
+  .qhearts{font-size:1.2rem;letter-spacing:5px;margin-bottom:8px}
+  .opt.chosen{background:rgba(255,61,127,.55);border-color:var(--pink);transform:scale(1.03)}
+  .react{min-height:2.8em;margin-top:12px;color:var(--gold);font-size:.95rem;line-height:1.5}
+  .radar{position:relative;width:110px;height:110px;margin:6px auto 14px;display:flex;align-items:center;justify-content:center;font-size:3rem}
+  .radar .ping{position:absolute;inset:0;border-radius:50%;border:2px solid var(--pink);animation:ping 1.4s infinite}
+  .radar .ping:nth-child(2){animation-delay:.7s}
+  @keyframes ping{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+  .scanline{min-height:3em;font-size:1rem;color:var(--gold)}
+  .resbadge{font-family:'Great Vibes',cursive;font-size:2.8rem;color:var(--pink);text-shadow:0 0 22px rgba(255,107,157,.7);line-height:1.2}
+  .bigpct{font-size:2.3rem;font-weight:600;color:var(--gold);margin:6px 0}
+  .stats{display:grid;gap:8px;margin:14px 0;text-align:left;font-size:.9rem}
+  .stats div{display:flex;justify-content:space-between;gap:10px;background:rgba(255,255,255,.08);padding:8px 14px;border-radius:12px}
+
+  /* ===== FINAL PAGE ===== */
+  #finalPage{background:radial-gradient(ellipse at 50% 120%,rgba(255,61,127,.35),transparent 60%)}
+  .stage{display:flex;flex-direction:column;align-items:center;width:100%}
+  .envelope{position:relative;width:min(80vw,300px);height:200px;cursor:pointer;margin:20px 0;animation:float 3s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-12px)}}
+  .env-body{position:absolute;inset:0;background:linear-gradient(135deg,#ff8fb1,#ff4d88);border-radius:12px;box-shadow:0 20px 50px rgba(255,61,127,.5)}
+  .env-flap{position:absolute;top:0;left:0;right:0;height:110px;background:linear-gradient(160deg,#ff9fbd,#ff6b9d);
+    clip-path:polygon(0 0,100% 0,50% 100%);border-radius:12px 12px 0 0;transform-origin:top;transition:transform .8s}
+  .env-seal{position:absolute;top:84px;left:50%;transform:translateX(-50%);font-size:2.4rem;z-index:2;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));animation:beat 1.4s infinite}
+  .envelope.open .env-flap{transform:rotateX(180deg)}
+  .envelope.open .env-seal{opacity:0;transition:.3s}
+  .paper{max-width:560px;width:100%;color:#4a1d33;padding:30px 26px;border-radius:6px;
+    background:linear-gradient(#fff8f0,#ffeede);box-shadow:0 25px 60px rgba(0,0,0,.5);text-align:left;position:relative;
+    font-family:'Playfair Display',serif;line-height:1.95;font-size:1.02rem;animation:rise 1s ease}
+  .paper::before{content:'';position:absolute;inset:8px;border:1px dashed rgba(255,61,127,.35);border-radius:4px;pointer-events:none}
+  @keyframes rise{from{opacity:0;transform:translateY(60px) scale(.9)}to{opacity:1}}
+  .paper h3{font-family:'Great Vibes',cursive;font-size:2.2rem;color:#d6246e;font-weight:400;margin-bottom:6px}
+  .ask{font-family:'Great Vibes',cursive;font-size:clamp(2rem,7vw,2.8rem);color:#d6246e;text-align:center;margin:14px 0 4px;line-height:1.3}
+  .paper .row{margin-top:10px}
+  #noBtn{position:relative;background:#fff;color:#d6246e;border:1px solid #f3b7cd}
+  .glowheart{font-size:min(38vw,170px);animation:beat 1.3s infinite;filter:drop-shadow(0 0 40px #ff3d7f) drop-shadow(0 0 80px #ff3d7f)}
+  .big-yes{font-family:'Great Vibes',cursive;font-size:clamp(2.6rem,10vw,4.5rem);color:#ffd6e7;
+    text-shadow:0 0 20px #ff3d7f,0 0 50px #ff3d7f;line-height:1.2}
+  .promise{max-width:520px;line-height:1.9;font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;margin:14px 0;color:#ffe3ee}
+  .sig{font-family:'Great Vibes',cursive;font-size:2.4rem;color:var(--gold);text-shadow:0 0 15px rgba(255,214,165,.6)}
+  #confetti{position:fixed;inset:0;z-index:9;pointer-events:none}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<canvas id="confetti"></canvas>
+<div class="title-bar" id="barTitle">For Advika ♥</div>
+
+<div class="wrap">
+
+  <!-- PAGE 1 -->
+  <section class="page active" data-name="Welcome">
+    <div class="bigheart">💖</div>
+    <h1 class="script">Advika</h1>
+    <p style="font-size:1.1rem;color:var(--gold);margin-top:-2px">Meri "Ad" ke naam ✨</p>
+    <p class="sub">Ye chhoti si duniya Abhishek ne sirf tumhare liye banayi hai.<br>Bas Next dabate jao… ➜</p>
+    <div class="typed" id="typed"></div>
+    <div class="row"><button class="btn" onclick="go(1)">Shuru karein ✨</button></div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="page" data-name="Shayari">
+    <h2 class="script">Teri aankhein, teri awaaz</h2>
+    <div class="glass shayari-card">
+      <div class="tag" id="shTag"></div>
+      <div class="shayari-text" id="shText"></div>
+      <div class="counter" id="shCount"></div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" onclick="shMove(-1)">← Prev shayari</button>
+      <button class="btn" onclick="shMove(1)">Next shayari →</button>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page" data-name="Game 1">
+    <h2 class="script">Dil pakdo! 💗</h2>
+    <p class="sub" style="margin:0 0 10px">Gire hue ❤️ pakdo (💎 = 5 points), 💔 se bacho. Time hai 30 second!</p>
+    <div class="hud"><span>Score: <b id="cScore">0</b></span><span>Time: <b id="cTime">30</b></span><span>Best: <b id="cBest">0</b></span></div>
+    <div id="arena">
+      <div class="overlay" id="cOverlay">
+        <div style="font-size:2.5rem">💘</div>
+        <div id="cMsg">Ad, ready ho?</div>
+        <button class="btn" onclick="startCatch()">Start</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section class="page" data-name="Game 2">
+    <h2 class="script">Yaadon ka khel 🧠</h2>
+    <p class="sub" style="margin:0 0 10px">Jodiyan milao, bilkul hamari tarah 😉</p>
+    <div class="hud"><span>Moves: <b id="mMoves">0</b></span><span>Pairs: <b id="mPairs">0</b>/8</span></div>
+    <div class="grid" id="mGrid"></div>
+    <div class="row"><button class="btn ghost" onclick="initMemory()">Phir se khelo 🔄</button></div>
+  </section>
+
+  <!-- PAGE 5 -->
+  <section class="page" data-name="Quiz">
+    <h2 class="script">Love Scanner 💞</h2>
+    <p class="sub" style="margin:0 0 14px">5 sawaal, ek dil-wala scan, aur Ad ka apna special result ✨</p>
+    <div class="glass quiz" id="quiz"></div>
+  </section>
+
+  <!-- PAGE 6 -->
+  <section class="page" id="finalPage" data-name="Ek khaas baat">
+
+    <!-- stage 1: envelope -->
+    <div class="stage" id="st1">
+      <h2 class="script">Ek khat tumhare naam…</h2>
+      <div class="envelope" id="env" onclick="openEnv()">
+        <div class="env-body"></div>
+        <div class="env-flap"></div>
+        <div class="env-seal">💌</div>
+      </div>
+      <p class="sub">Khat kholne ke liye envelope par tap karo ✨</p>
+    </div>
+
+    <!-- stage 2: letter -->
+    <div class="stage hidden" id="st2">
+      <div class="paper">
+        <h3>Dear Advika,</h3>
+        <p>Kuch cheezein bina bataye dil me ghar kar leti hain. Tumhari aankhein unme se ek hain, jinme dekhte hi lagta hai ki saari baatein bina bole ho gayi.</p>
+        <p style="margin-top:10px">Aur tumhari awaaz… yaar, uska kya kahna! Din kitna bhi thaka hua ho, bas ek baar tumhe sun lun to sab theek lagne lagta hai.</p>
+        <p style="margin-top:10px">Ye lafz kisi kitaab se nahi, seedhe dil se aaye hain. Tum jo bhi jawaab do, meri nazar me tumhari izzat aur tumhari muskurahat hamesha sabse upar rahegi. 💖<br><span style="font-family:'Great Vibes',cursive;font-size:1.5rem;color:#d6246e">— Abhishek</span></p>
+        <div class="ask">Ad, kya tum meri ho jaogi?</div>
+        <div class="row" id="final" style="align-items:center;justify-content:center">
+          <button class="btn" id="yesBtn" onclick="sayYes()">Haan 💖</button>
+          <button class="btn" id="noBtn">Nahi 🙈</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- stage 3: yes -->
+    <div class="stage hidden" id="st3">
+      <div class="glowheart">💖</div>
+      <div class="big-yes">Tumne haan kaha!</div>
+      <p class="promise">Tumhari aankhon me main apna future dekhta hoon, aur tumhari awaaz me apna sukoon.<br>
+      Ye promise hai, Ad: har din tumhe thoda aur khush rakhne ki koshish karunga. 🌹</p>
+      <div class="sig" id="sig"></div>
+      <div class="row"><button class="btn" onclick="boom();boom()">Aur celebrate karein 🎉</button></div>
+    </div>
+  </section>
+</div>
+
+<div class="nav">
+  <button class="navbtn" id="prevBtn" onclick="go(cur-1)">‹ Prev</button>
+  <div class="dots" id="dots"></div>
+  <button class="navbtn" id="nextBtn" onclick="go(cur+1)">Next ›</button>
+</div>
+
+<script>
+const YOUR_NAME = "Abhishek";
+const $ = s => document.querySelector(s);
+const pages = [...document.querySelectorAll('.page')];
+let cur = 0;
+
+/* ---------- Navigation ---------- */
+const dotsEl = $('#dots');
+pages.forEach((_, i) => { const d = document.createElement('div'); d.className = 'dot'; d.onclick = () => go(i); dotsEl.appendChild(d); });
+function go(i){
+  if(i < 0 || i >= pages.length) return;
+  pages[cur].classList.remove('active');
+  cur = i;
+  pages[cur].classList.add('active');
+  [...dotsEl.children].forEach((d, k) => d.classList.toggle('on', k === cur));
+  $('#barTitle').textContent = cur === 0 ? 'For Advika ♥' : pages[cur].dataset.name + ' ♥';
+  $('#prevBtn').disabled = cur === 0;
+  $('#nextBtn').disabled = cur === pages.length - 1;
+  if(cur === 0) typeIt();
+  if(cur === 3 && !memInit) initMemory();
+  if(cur === 4) startQuiz();
+}
+document.addEventListener('keydown', e => { if(e.key === 'ArrowRight') go(cur+1); if(e.key === 'ArrowLeft') go(cur-1); });
+
+/* ---------- Background ---------- */
+const bg = $('#bg'), bx = bg.getContext('2d');
+let W, H, parts = [];
+function resize(){ W = bg.width = innerWidth; H = bg.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+function mk(init){ return {x:Math.random()*W, y:init?Math.random()*H:H+20, s:8+Math.random()*18, v:.3+Math.random()*.8, a:.15+Math.random()*.4, h:Math.random()<.6, w:Math.random()*6.28}; }
+for(let i = 0; i < 45; i++) parts.push(mk(true));
+(function loopBg(){
+  bx.clearRect(0,0,W,H);
+  parts.forEach((p, i) => {
+    p.y -= p.v; p.w += .02; p.x += Math.sin(p.w) * .5;
+    if(p.y < -30) parts[i] = mk(false);
+    bx.globalAlpha = p.a; bx.font = p.s + 'px serif'; bx.fillText(p.h ? '💗' : '✨', p.x, p.y);
+  });
+  requestAnimationFrame(loopBg);
+})();
+
+/* ---------- Typewriter ---------- */
+const lines = [
+  "Kuch log zindagi me aate nahi,\nbas seedhe dil me utar jaate hain…",
+  "Aur Advika, tum unme sabse khaas ho. 🌸",
+  "Isliye ye website sirf tumhare liye. 💌"
+];
+let typingId = 0;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function typeIt(){
+  const my = ++typingId, el = $('#typed'); el.textContent = '';
+  for(const ln of lines){
+    for(const ch of ln){ if(my !== typingId) return; el.textContent += ch; await sleep(42); }
+    await sleep(800); el.textContent += '\n\n';
+  }
+}
+
+/* ---------- Shayari ---------- */
+const shayari = [
+ {t:"Aankhein",   s:"Teri aankhon ke aage samandar bhi uthla lagta hai,\nDoob jaana hi manzil hai, ab kinara kise chahiye."},
+ {t:"Awaaz",      s:"Teri awaaz jab mere naam ko chhoo leti hai, Ad,\nTo mera naam bhi mujhe achha lagne lagta hai."},
+ {t:"Aankhein",   s:"Teri ek jhalak mein kitni kahaaniyan basi hain,\nAur main har kahaani ka pehla kirdaar banna chahta hoon."},
+ {t:"Awaaz",      s:"Log kehte hain koyal ki boli sabse meethi hoti hai,\nShayad unhone kabhi tumhari awaaz nahi suni."},
+ {t:"Neend",      s:"Neend ko bhi ab shikayat hai mujhse,\nTeri aankhon ke khwaab raaton ko ghere rehte hain."},
+ {t:"Dil se",     s:"Tumhara ek 'hello' bhi kisi ghazal se kam nahi,\nAur tumhari hansi? Wo to poora deewan hai."},
+ {t:"Aankhein",   s:"Kajal ki wo patli si lakeer, aur uspe meri poori duniya tiki hai,\nTeri nazar jhuke to subah ruki, uthe to shaam bhi kitaab si likhi hai."},
+ {t:"Shayar",     s:"Main shayar nahi tha, Advika, tumhari aankhon ne bana diya,\nTumhari awaaz ne har lafz ko gungunaa diya."},
+ {t:"Chaand",     s:"Chaand ko bhi jalan hoti hai tumse,\nRaat bhar jaagta hai, par teri aankhon jaisi roshni kahan."},
+ {t:"Awaaz",      s:"Tum bolti ho to hawa mein sargam ghul jaati hai,\nTum chup ho to bhi aankhein poori kitaab kehti hain."},
+ {t:"Dua",        s:"Mohabbat meri na sahi, par dua meri hamesha tumhare saath hai,\nTum muskurati raho, bas itni si meri baat hai."},
+ {t:"Naam",       s:"Tera naam likhta hoon to kalam bhi muskura deti hai,\nTere khayal se meri har tanha raat mehfil ban jaati hai."}
+];
+let si = 0;
+function showShayari(){
+  const t = $('#shText'); t.style.opacity = 0;
+  setTimeout(() => {
+    t.textContent = shayari[si].s; t.style.opacity = 1;
+    $('#shTag').textContent = '✦ ' + shayari[si].t + ' ✦';
+    $('#shCount').textContent = (si+1) + ' / ' + shayari.length + '  ♥';
+  }, 250);
+}
+function shMove(d){ si = (si + d + shayari.length) % shayari.length; showShayari(); }
+showShayari();
+
+/* ---------- Game 1 ---------- */
+let cScore = 0, cTime = 30, cTimer, cSpawn, cRunning = false, best = 0;
+try{ best = +localStorage.getItem('adBest') || 0; }catch(e){}
+$('#cBest').textContent = best;
+function startCatch(){
+  $('#cOverlay').classList.add('hidden');
+  cScore = 0; cTime = 30; cRunning = true;
+  $('#cScore').textContent = 0; $('#cTime').textContent = 30;
+  clearInterval(cTimer); clearInterval(cSpawn);
+  cTimer = setInterval(() => { cTime--; $('#cTime').textContent = cTime; if(cTime <= 0) endCatch(); }, 1000);
+  cSpawn = setInterval(spawn, 550);
+}
+function spawn(){
+  if(!cRunning) return;
+  const a = $('#arena'), e = document.createElement('div');
+  const bad = Math.random() < .2;
+  e.className = 'fall'; e.textContent = bad ? '💔' : (Math.random() < .2 ? '💎' : '❤️');
+  e.style.left = Math.random() * (a.clientWidth - 40) + 'px';
+  e.style.animationDuration = (2 + Math.random()*1.8) + 's';
+  e.addEventListener('pointerdown', ev => {
+    ev.preventDefault(); if(!cRunning) return;
+    if(bad) cScore = Math.max(0, cScore - 3); else cScore += e.textContent === '💎' ? 5 : 1;
+    $('#cScore').textContent = cScore;
+    e.textContent = bad ? '💥' : '✨'; setTimeout(() => e.remove(), 150);
+  });
+  e.addEventListener('animationend', () => e.remove());
+  a.appendChild(e);
+}
+function endCatch(){
+  cRunning = false; clearInterval(cTimer); clearInterval(cSpawn);
+  document.querySelectorAll('.fall').forEach(x => x.remove());
+  if(cScore > best){ best = cScore; $('#cBest').textContent = best; try{ localStorage.setItem('adBest', best); }catch(e){} }
+  const msg = cScore >= 25 ? 'Wah Ad! Tumne to mera dil hi pakad liya 😍'
+            : cScore >= 12 ? 'Bahut badhiya! Thoda aur, aur dil tumhara 💕'
+            : 'Koi baat nahi, mera dil to waise bhi tumhare paas hai 🥰';
+  $('#cMsg').innerHTML = 'Score: <b>' + cScore + '</b><br>' + msg;
+  $('#cOverlay').classList.remove('hidden');
+  $('#cOverlay button').textContent = 'Phir se khelo';
+  if(cScore >= 25) boom();
+}
+
+/* ---------- Game 2 ---------- */
+let memInit = false, flipped = [], lock = false, moves = 0, pairs = 0;
+function initMemory(){
+  memInit = true; moves = 0; pairs = 0; flipped = []; lock = false;
+  $('#mMoves').textContent = 0; $('#mPairs').textContent = 0;
+  const em = ['🌹','💖','🌙','⭐','🦋','🍫','🎀','☕'];
+  const deck = [...em, ...em].sort(() => Math.random() - .5);
+  const g = $('#mGrid'); g.innerHTML = '';
+  deck.forEach(e => {
+    const c = document.createElement('div'); c.className = 'card'; c.dataset.e = e;
+    c.innerHTML = '<div class="in"><div class="face front">?</div><div class="face back">' + e + '</div></div>';
+    c.onclick = () => flip(c); g.appendChild(c);
+  });
+}
+function flip(c){
+  if(lock || c.classList.contains('flip')) return;
+  c.classList.add('flip'); flipped.push(c);
+  if(flipped.length === 2){
+    moves++; $('#mMoves').textContent = moves; lock = true;
+    const [a, b] = flipped;
+    if(a.dataset.e === b.dataset.e){
+      a.classList.add('done'); b.classList.add('done'); pairs++;
+      $('#mPairs').textContent = pairs; flipped = []; lock = false;
+      if(pairs === 8) setTimeout(() => { boom(); alert('Wah Ad! Sirf ' + moves + ' moves me sab jod diye 💖\nHum dono bhi aisi hi perfect jodi hain 😉'); }, 500);
+    } else {
+      setTimeout(() => { a.classList.remove('flip'); b.classList.remove('flip'); flipped = []; lock = false; }, 800);
+    }
+  }
+}
+
+/* ---------- Quiz ---------- */
+const qs = [
+  {q:'Raat ke 12 baje achanak phone bajta hai. Screen par kiska naam dekhna pasand karogi?', o:[
+    {t:'📞 Jiska intezaar tha',            p:3, r:'Seedhi dil pe baat! Abhishek yahan blush kar gaya 😳'},
+    {t:'💬 Message karke puchungi',        p:2, r:'Cute! Ek hi line me sab samjha diya 💕'},
+    {t:'🤔 Pehle dekhungi kaun hai',       p:2, r:'Smart choice, Ad! Thoda suspense bhi achha hai 😎'},
+    {t:'😴 Silent kar dungi',              p:1, r:'Ruthless! Par chalo, neend bhi zaroori hai 😄'}]},
+  {q:'Ek perfect din ki trip, kahan jaana pasand karogi?', o:[
+    {t:'🏔️ Pahaadon me garma-garam chai', p:3, r:'Pahaad, chai aur sukoon… poori filmy picture ☕'},
+    {t:'🌊 Samandar ke kinare',            p:2, r:'Samandar bhi tumhari aankhon se sharma jaye 🌊'},
+    {t:'🏙️ City me street food',          p:2, r:'Golgappe wali queen! Ye choice pakki hai 😍'},
+    {t:'🏡 Ghar pe blanket aur movie',     p:1, r:'Cozy mode on! Popcorn ready rakhna 🍿'}]},
+  {q:'Kisi se milte hi tum sabse pehle kya notice karti ho?', o:[
+    {t:'👀 Aankhein',                      p:3, r:'Bilkul sahi. Aankhein sab kuch bol deti hain 👀'},
+    {t:'🎙️ Awaaz',                        p:3, r:'Awaaz ka jaadu… Abhishek bhi isi me kho gaya hai 🎙️'},
+    {t:'😊 Muskaan',                       p:2, r:'Ek muskaan aur din ban jaata hai 🌸'},
+    {t:'🧠 Baatein',                       p:2, r:'Dimaag wali baat! Impressive 💫'}]},
+  {q:'Koi tumhe surprise de, to sabse pyaara kya lagega?', o:[
+    {t:'💌 Haath se likha hua khat',       p:3, r:'Khat! Kisi ne tumhare liye ek likh rakha hai 😉'},
+    {t:'🌹 Ek akela gulaab',               p:3, r:'Ek hi kaafi hai, jab dil se diya ho 🌹'},
+    {t:'🍫 Meri favourite chocolate',      p:2, r:'Note kar liya gaya hai 📝🍫'},
+    {t:'🎁 Bada sa gift box',              p:2, r:'Surprise lover! Sahi hai 🎁'}]},
+  {q:'Abhishek kabhi dil ki koi baat bole, to tum…', o:[
+    {t:'🥹 Dhyaan se poori baat sununga',  p:3, r:'Bas yahi chahiye tha. Shukriya, Ad 🥹'},
+    {t:'😳 Sharma jaungi',                 p:3, r:'Tumhara sharmana sabse pyaara hai 😳💗'},
+    {t:'😜 Pehle thoda satati hoon',       p:2, r:'Haha! Satane ka bhi apna maza hai 😜'},
+    {t:'🙈 Bhaag jaungi',                  p:1, r:'Pakad lenge! Last page par "Nahi" button bhi bhaagta hai 😜'}]}
+];
+let qi = 0, qscore = 0, qlock = false, scanId = 0;
+function startQuiz(){ qi = 0; qscore = 0; qlock = false; scanId++; renderQ(); }
+function renderQ(){
+  const box = $('#quiz');
+  if(qi >= qs.length){ scan(); return; }
+  const x = qs[qi];
+  const hs = qs.map((_, k) => k < qi ? '💗' : '🤍').join('');
+  box.innerHTML = '<div class="qhearts">' + hs + '</div><div class="counter">Sawaal ' + (qi+1) + '/' + qs.length + '</div><p class="q">' + x.q + '</p>' +
+    x.o.map((o, k) => '<button class="opt" data-k="' + k + '">' + o.t + '</button>').join('') + '<div class="react" id="react"></div>';
+  box.querySelectorAll('.opt').forEach(b => b.onclick = () => pick(+b.dataset.k, b));
+}
+function pick(k, btn){
+  if(qlock) return; qlock = true;
+  const o = qs[qi].o[k]; qscore += o.p;
+  btn.classList.add('chosen');
+  $('#react').textContent = o.r;
+  setTimeout(() => { qi++; qlock = false; renderQ(); }, 1700);
+}
+function scan(){
+  const box = $('#quiz'), my = ++scanId;
+  box.innerHTML = '<div class="radar"><div class="ping"></div><div class="ping"></div><span>💓</span></div><div class="scanline" id="sl">Scan shuru ho raha hai…</div><div class="meter"><i id="mfill"></i></div>';
+  const steps = [
+    '👀 Aankhon ki chamak naapi ja rahi hai…',
+    '🎙️ Awaaz ki mithaas check ho rahi hai…',
+    '😊 Muskaan ka asar dekha ja raha hai…',
+    '💓 Abhishek ki dhadkan match ho rahi hai…',
+    '✨ Result taiyaar hai…'
+  ];
+  let n = 0;
+  const t = setInterval(() => {
+    if(my !== scanId){ clearInterval(t); return; }
+    if(n < steps.length){ $('#sl').textContent = steps[n]; $('#mfill').style.width = ((n+1)/steps.length*100) + '%'; n++; }
+    else { clearInterval(t); result(); }
+  }, 1100);
+}
+function result(){
+  const R = qscore >= 12 ? {t:'Dil ki Rani 👑', d:'Aankhon me jaadu, awaaz me sukoon. Tumhari ek muskaan se sab kuch theek lagne lagta hai.'}
+          : qscore >= 8  ? {t:'Chaand ki Chandni 🌙', d:'Shaant, pyaari aur sabse alag. Tumhari maujoodgi hi roshni hai.'}
+          : {t:'Masoom si Pari 🦋', d:'Thodi shararati, thodi masoom, aur poori tarah dil-churane wali.'};
+  const box = $('#quiz');
+  box.innerHTML = '<div class="resbadge">' + R.t + '</div><p class="sub" style="margin:6px auto 0">' + R.d + '</p>' +
+    '<div class="stats"><div><span>👀 Aankhon ki chamak</span><b>99%</b></div><div><span>🎙️ Awaaz ki mithaas</span><b>100%</b></div><div><span>😊 Muskaan ka asar</span><b>Zabardast</b></div></div>' +
+    '<div class="sub" style="margin:0">Abhishek + Advika</div><div class="bigpct" id="mp">0%</div><p class="sub" id="mtxt" style="margin:0"></p>';
+  let n = 0; const t = setInterval(() => {
+    n += 3; $('#mp').textContent = Math.min(n, 100) + '%';
+    if(n >= 100){ clearInterval(t); $('#mp').textContent = '∞% 💖'; $('#mtxt').textContent = 'Ye meter 100 pe nahi rukta, Ad! Ab Next dabao, ek khat tumhara intezaar kar raha hai 💌'; boom(); }
+  }, 40);
+}
+
+/* ---------- Final page ---------- */
+function openEnv(){
+  const env = $('#env'); if(env.classList.contains('open')) return;
+  env.classList.add('open'); boom();
+  setTimeout(() => { $('#st1').classList.add('hidden'); $('#st2').classList.remove('hidden'); }, 1100);
+}
+const no = $('#noBtn'); let dodges = 0;
+function dodge(e){
+  e.preventDefault();
+  no.style.position = 'fixed';
+  no.style.left = Math.random() * (innerWidth - 120) + 'px';
+  no.style.top = (Math.random() * (innerHeight - 200) + 70) + 'px';
+  no.style.zIndex = 8;
+  dodges++;
+  $('#yesBtn').style.transform = 'scale(' + Math.min(1.9, 1 + dodges * .09) + ')';
+  if(dodges === 4) no.textContent = 'Pakad ke dikhao 😜';
+  if(dodges === 8) no.textContent = 'Please Haan bol do 🥺';
+}
+no.addEventListener('mouseover', dodge);
+no.addEventListener('touchstart', dodge, {passive:false});
+no.addEventListener('click', dodge);
+function sayYes(){
+  $('#st2').classList.add('hidden'); $('#st3').classList.remove('hidden');
+  $('#sig').textContent = 'Hamesha tumhara, ' + YOUR_NAME + ' 💌';
+  boom(); setTimeout(boom, 1200); setTimeout(boom, 2400); setTimeout(boom, 3600);
+}
+
+/* ---------- Confetti ---------- */
+const cf = $('#confetti'), cx = cf.getContext('2d'); let bits = [], cfRun = false;
+function sizeCf(){ cf.width = innerWidth; cf.height = innerHeight; } sizeCf(); addEventListener('resize', sizeCf);
+function boom(){
+  const em = ['💖','🌹','✨','💗','🎉','🌸','🦋'];
+  for(let i = 0; i < 90; i++) bits.push({x:innerWidth/2, y:innerHeight/2, vx:(Math.random()-.5)*16, vy:Math.random()*-15-3, g:.35, e:em[(Math.random()*em.length)|0], s:16+Math.random()*18, life:140});
+  if(!cfRun){ cfRun = true; tickCf(); }
+}
+function tickCf(){
+  cx.clearRect(0,0,cf.width,cf.height);
+  bits.forEach(b => { b.x += b.vx; b.y += b.vy; b.vy += b.g; b.life--; cx.globalAlpha = Math.max(0, b.life/140); cx.font = b.s + 'px serif'; cx.fillText(b.e, b.x, b.y); });
+  bits = bits.filter(b => b.life > 0);
+  if(bits.length) requestAnimationFrame(tickCf); else { cx.clearRect(0,0,cf.width,cf.height); cfRun = false; }
+}
+
+go(0);
+</script>
+</body>
+</html>
